@@ -1,0 +1,16 @@
+before_script:
+ - apt-get update -qq && apt-get install -y -qq zip
+
+stages:
+  - Build
+
+build:
+  stage: Build
+  script:
+    - "bash build.sh"
+    - zip -r BinarySilvelizerX_build.zip Build
+    
+  artifacts:
+    paths:
+    - BinarySilvelizerX_build.zip
+    expire_in: 1 week
