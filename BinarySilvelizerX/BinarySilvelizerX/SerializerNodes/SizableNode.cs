@@ -25,7 +25,11 @@ namespace BinarySilvelizerX.SerializerNodes
                     return _lengthInfo.StaticLength;
 
                 case LengthStorageType.External:
-                    return (int)_lengthInfo.LengthSource.Info.GetValue(sourceObject);
+                    var lenVal = _lengthInfo.LengthSource.Info.GetValue(sourceObject);
+                    var intType = typeof(int);
+                    return Info.PropertyType == intType
+                        ? (int)lenVal
+                        : (int)Convert.ChangeType(lenVal, intType);
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -35,7 +39,12 @@ namespace BinarySilvelizerX.SerializerNodes
         internal void SetLength(object sourceObject, int value)
         {
             if (_lengthInfo.StorageType == LengthStorageType.External)
-                _lengthInfo.LengthSource.Info.SetValue(sourceObject, value);
+            {
+                var intType = typeof(int);
+                _lengthInfo.LengthSource.Info.SetValue(sourceObject, Info.PropertyType == intType
+                    ? value
+                    : (int)Convert.ChangeType(value, intType));
+            }
             else throw new ArgumentOutOfRangeException();
         }
     }
