@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Net;
 using BinarySilvelizerX.Entities;
 
 namespace BinarySilvelizerX.Extensions
@@ -15,8 +16,8 @@ namespace BinarySilvelizerX.Extensions
 
         public static bool IsCollection(this Type type) => typeof(ICollection).IsAssignableFrom(type);
 
-        //public static bool IsArray(this Type type) => typeof(Array).IsAssignableFrom(type);
-
         public static bool IsClearValueType(this Type type) => !type.IsClass && !type.IsNonPrimitiveStruct() || type == typeof(decimal);
+
+        public static bool IsIPAddress(this Type type) => type == typeof(IPAddress);
     }
 }

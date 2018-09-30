@@ -46,6 +46,8 @@ namespace BinarySilvelizerX.Core
                     }
                     else if (type.IsSpacer())
                         nodes.Add(new SpacerNode(prop));
+                    else if (type.IsIPAddress())
+                        nodes.Add(new IPAddressNode(prop));
                     else
                         throw new Exception($"Type {type} is not supported!");
                 }

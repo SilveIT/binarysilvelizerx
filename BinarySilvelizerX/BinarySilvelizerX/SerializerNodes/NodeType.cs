@@ -7,6 +7,7 @@
         Object,
         Array,
         List,
-        Spacer
+        Spacer,
+        IPAddress
     }
 }
