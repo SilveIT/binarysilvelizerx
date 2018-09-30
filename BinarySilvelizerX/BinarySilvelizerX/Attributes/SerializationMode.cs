@@ -1,4 +1,5 @@
 ﻿using System;
+using BinarySilvelizerX.Core;
 
 namespace BinarySilvelizerX.Attributes
 {
@@ -33,7 +34,7 @@ namespace BinarySilvelizerX.Attributes
             if (string.IsNullOrEmpty(propName))
                 throw new ArgumentException("Property name in serialization offset mode cannot be null or empty!",
                     nameof(propName));
-            AccessMode = SerializationAccessMode.OnlyByteFields;
+            AccessMode = SerializerDefaults.DefaultPropAccessMode;
             OffsetMode = offsetMode;
             PropertyName = propName;
         }
@@ -41,17 +42,17 @@ namespace BinarySilvelizerX.Attributes
 
     public enum SerializationOffsetMode
     {
-        Unrestricted = 0,
-        StartingFrom = 1 << 0,
-        EndingOn = 1 << 1
+        Unrestricted,
+        StartingFrom,
+        EndingOn
     }
 
     [Flags]
     public enum SerializationAccessMode
     {
         OnlyByteFields = 0,
-        AllPublic = 1 << 2,
-        AllPrivate = 1 << 3,
+        AllPublic = 1 << 0,
+        AllPrivate = 1 << 1,
         All = AllPublic | AllPrivate
     }
 }

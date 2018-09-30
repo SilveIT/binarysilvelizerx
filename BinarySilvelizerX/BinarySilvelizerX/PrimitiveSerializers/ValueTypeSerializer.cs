@@ -120,7 +120,7 @@ namespace BinarySilvelizerX.PrimitiveSerializers
         {
             if (type.BaseType == typeof(Enum))
                 type = Enum.GetUnderlyingType(type);
-            var available = reader.BaseStream.AvailableLength();
+            var available = reader.AvailableLength();
             switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Double:

@@ -11,14 +11,14 @@ namespace BinarySilvelizerX.Core
         internal static List<BasicNode> GetNodes(Type sourceType)
         {
             List<BasicNode> nodes;
-            var cacheEnabled = SerializerTypeCacheController.Enabled;
-            if (cacheEnabled && SerializerTypeCacheController.CacheStorage.ContainsKey(sourceType))
-                nodes = SerializerTypeCacheController.CacheStorage[sourceType];
+            var cacheEnabled = SerializerTypeCache.Enabled;
+            if (cacheEnabled && SerializerTypeCache.CacheStorage.ContainsKey(sourceType))
+                nodes = SerializerTypeCache.CacheStorage[sourceType];
             else
             {
                 nodes = GenerateNodes(sourceType);
                 if (cacheEnabled)
-                    SerializerTypeCacheController.CacheStorage.Add(sourceType, nodes);
+                    SerializerTypeCache.CacheStorage.Add(sourceType, nodes);
             }
             return nodes;
         }

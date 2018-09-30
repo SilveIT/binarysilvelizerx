@@ -3,10 +3,10 @@ using System.Reflection;
 using System.Text;
 using BinarySilvelizerX.Attributes;
 using BinarySilvelizerX.Common;
+using BinarySilvelizerX.Core;
 using BinarySilvelizerX.Extensions;
 using BinarySilvelizerX.PrimitiveSerializers;
 using BinarySilvelizerX.Streams;
-using BinarySilvelizerX.Utils;
 
 namespace BinarySilvelizerX.SerializerNodes
 {
@@ -19,7 +19,7 @@ namespace BinarySilvelizerX.SerializerNodes
         {
             _lengthInfo = lengthInfo;
             _stringEncoding = Info.GetFirstAttribute<BFEncodingAttribute>()?.Encoding
-                ?? Encoding.GetEncoding((int)TextUtils.CodePage.Windows1251);
+                ?? SerializerDefaults.DefaultStringEncoding;
         }
 
         internal override void Serialize(ExtendedWriter writer, object sourceObject)
@@ -84,7 +84,7 @@ namespace BinarySilvelizerX.SerializerNodes
             var str = string.Empty;
             if (len > 0)
             {
-                if (reader.BaseStream.AvailableLength() < len) return false;
+                if (reader.AvailableLength() < len) return false;
                 str = enc.GetString(reader.ReadBytes(len)).TrimEnd('\0');
             }
             Info.SetValue(targetObject, str);

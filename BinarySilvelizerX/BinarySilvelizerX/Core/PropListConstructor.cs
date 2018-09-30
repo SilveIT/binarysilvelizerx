@@ -14,13 +14,13 @@ namespace BinarySilvelizerX.Core
         {
             //Stage 1, getting attribute data
             var attributes = objectType.GetAttributesArray<SerializationModeAttribute>();
-            var accessFilter = SerializationAccessMode.OnlyByteFields;
+            var accessFilter = SerializerDefaults.DefaultPropAccessMode;
             string startPropStr = null;
             string endPropStr = null;
             if (attributes != null)
                 foreach (var attribute in attributes)
                 {
-                    accessFilter |= attribute.AccessMode;
+                    accessFilter = attribute.AccessMode;
                     switch (attribute.OffsetMode)
                     {
                         case SerializationOffsetMode.Unrestricted:

@@ -9,7 +9,5 @@ namespace BinarySilvelizerX.Extensions
             var stream = (MemoryStream)reader.BaseStream;
             return stream.Length - stream.Position;
         }
-
-        public static long AvailableLength(this Stream stream) => stream.Length - stream.Position;
     }
 }

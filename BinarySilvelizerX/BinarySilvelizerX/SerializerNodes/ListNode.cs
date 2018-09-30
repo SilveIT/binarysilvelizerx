@@ -98,7 +98,7 @@ namespace BinarySilvelizerX.SerializerNodes
 
                 Info.SetValue(targetObject, list);
             }
-            else if (reader.BaseStream.AvailableLength() >= len)
+            else if (reader.AvailableLength() >= len)
                 Info.SetValue(targetObject, reader.ReadBytes(len).ToList());
             else
                 return false;

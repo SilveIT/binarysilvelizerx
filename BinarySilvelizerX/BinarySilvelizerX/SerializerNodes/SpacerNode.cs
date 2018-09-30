@@ -12,15 +12,15 @@ namespace BinarySilvelizerX.SerializerNodes
 
         public SpacerNode(PropertyInfo info) : base(info, NodeType.Spacer)
         {
-            SpacerLength = info.GetFirstAttribute<BFSpacerAttribute>().SpacerLength;
+            SpacerLength = info.GetFirstAttribute<BFSpacerAttribute>().SpacerLength; //TODO: mb replace it with BFLength?
         }
 
         internal override void Serialize(ExtendedWriter writer, object sourceObject) => writer.Write(BufferHelper.GetBytes(SpacerLength));
 
         internal override bool Deserialize(ExtendedReader reader, object targetObject)
         {
-            if (reader.BaseStream.AvailableLength() < SpacerLength) return false;
-            reader.ReadBytes(SpacerLength);
+            if (reader.AvailableLength() < SpacerLength) return false;
+            reader.ReadBytes(SpacerLength); //TODO: think about reader.BaseStream.Seek
             return true;
         }
     }

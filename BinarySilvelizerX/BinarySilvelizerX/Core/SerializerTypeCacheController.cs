@@ -6,7 +6,7 @@ using BinarySilvelizerX.SerializerNodes;
 
 namespace BinarySilvelizerX.Core
 {
-    public static class SerializerTypeCacheController
+    public static class SerializerTypeCache
     {
         internal static Dictionary<Type, List<BasicNode>> CacheStorage { get; } = new Dictionary<Type, List<BasicNode>>();
         public static bool Enabled { get; set; } = true;

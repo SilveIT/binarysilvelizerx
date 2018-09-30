@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using System.Text;
+using BinarySilvelizerX.Core;
 using BinarySilvelizerX.Streams;
 using BinarySilvelizerX.Utils;
 
@@ -11,7 +11,7 @@ namespace BinarySilvelizerX.PrimitiveSerializers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static void WriteDynamic(ExtendedWriter writer, string input)
         {
-            var encoding = Encoding.GetEncoding((int)TextUtils.CodePage.Windows1251);
+            var encoding = SerializerDefaults.DefaultStringEncoding;
             var strArr = encoding.GetBytes(input);
             var bytesPerChar = encoding.GetByteCount("0");
             writer.Write(input.Length + 1);
@@ -22,7 +22,7 @@ namespace BinarySilvelizerX.PrimitiveSerializers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static string ReadDynamic(ExtendedReader reader)
         {
-            var encoding = Encoding.GetEncoding((int)TextUtils.CodePage.Windows1251);
+            var encoding = SerializerDefaults.DefaultStringEncoding;
             var len = reader.ReadInt32();
             var bytesPerChar = encoding.GetByteCount("0");
             len *= bytesPerChar;
@@ -32,7 +32,7 @@ namespace BinarySilvelizerX.PrimitiveSerializers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static unsafe byte[] WriteDynamic(string input)
         {
-            var encoding = Encoding.GetEncoding((int)TextUtils.CodePage.Windows1251);
+            var encoding = SerializerDefaults.DefaultStringEncoding;
             var strArr = encoding.GetBytes(input);
             var ln = strArr.Length;
             var bytesPerChar = encoding.GetByteCount("0");
@@ -46,7 +46,7 @@ namespace BinarySilvelizerX.PrimitiveSerializers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static unsafe string ReadDynamic(byte[] array)
         {
-            var encoding = Encoding.GetEncoding((int)TextUtils.CodePage.Windows1251);
+            var encoding = SerializerDefaults.DefaultStringEncoding;
             int len;
             fixed (byte* t = &array[0])
                 len = *(int*)t;
