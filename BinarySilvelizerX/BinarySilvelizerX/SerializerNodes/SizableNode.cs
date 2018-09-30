@@ -39,12 +39,9 @@ namespace BinarySilvelizerX.SerializerNodes
         internal void SetLength(object sourceObject, int value)
         {
             if (_lengthInfo.StorageType == LengthStorageType.External)
-            {
-                var intType = typeof(int);
-                _lengthInfo.LengthSource.Info.SetValue(sourceObject, Info.PropertyType == intType
+                _lengthInfo.LengthSource.Info.SetValue(sourceObject, Info.PropertyType == typeof(int)
                     ? value
-                    : (int)Convert.ChangeType(value, intType));
-            }
+                    : Convert.ChangeType(value, Info.PropertyType));
             else throw new ArgumentOutOfRangeException();
         }
     }
