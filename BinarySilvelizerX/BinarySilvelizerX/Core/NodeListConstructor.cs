@@ -16,7 +16,7 @@ namespace BinarySilvelizerX.Core
                 nodes = SerializerTypeCache.CacheStorage[sourceType];
             else
             {
-                nodes = GenerateNodes(sourceType);
+                nodes = GenerateNodes(sourceType); //TODO: think about caching nulls
                 if (cacheEnabled)
                     SerializerTypeCache.CacheStorage.Add(sourceType, nodes);
             }
@@ -27,6 +27,12 @@ namespace BinarySilvelizerX.Core
         {
             var nodes = new List<BasicNode>();
             var props = PropListConstructor.GeneratePropertyInfoList(sourceType);
+            if (props.Length == 0)
+            {
+                if (SerializerDefaults.ThrowIfNoSerializableNodesFound)
+                    throw new Exception($"Type {sourceType} does not have any serializable properties!");
+                return null;
+            }
             foreach (var prop in props)
             {
                 var type = prop.PropertyType;
@@ -49,7 +55,7 @@ namespace BinarySilvelizerX.Core
                     else if (type.IsIPAddress())
                         nodes.Add(new IPAddressNode(prop));
                     else
-                        throw new Exception($"Type {type} is not supported!");
+                        nodes.Add(new ObjectNode(prop));
                 }
             }
             return nodes;
