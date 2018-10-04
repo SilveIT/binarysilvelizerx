@@ -1,26 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BinarySilvelizerX.Common;
 using BinarySilvelizerX.Extensions;
 using BinarySilvelizerX.SerializerNodes;
+using BinarySilvelizerX.Utils;
 
 namespace BinarySilvelizerX.Core
 {
     internal static class NodeListController
     {
-        internal static List<BasicNode> GetNodes(Type sourceType)
+        internal static List<BasicNode> GetNodes(Type sourceType) //TODO: think about caching nulls
         {
-            List<BasicNode> nodes;
-            var cacheEnabled = SerializerTypeCache.Enabled;
-            if (cacheEnabled && SerializerTypeCache.CacheStorage.ContainsKey(sourceType))
-                nodes = SerializerTypeCache.CacheStorage[sourceType];
-            else
+            return SerializerTypeCache.Enabled
+                ? AsyncHelper.RunSync(() => GetCachedNodesAsync(sourceType))
+                : GenerateNodes(sourceType);
+        }
+
+        private static async Task<List<BasicNode>> GetCachedNodesAsync(Type sourceType)
+        {
+            var cachedNodes = await SerializerTypeCache.GetNodes(sourceType);
+            if (cachedNodes != null) return cachedNodes;
+            var task = Task.Run(() => GenerateNodes(sourceType)).ContinueWith(t =>
             {
-                nodes = GenerateNodes(sourceType); //TODO: think about caching nulls
-                if (cacheEnabled)
-                    SerializerTypeCache.CacheStorage.Add(sourceType, nodes);
-            }
-            return nodes;
+                var result = t.Result;
+                SerializerTypeCache.Cache(sourceType, result);
+                SerializerTypeCache.CacheTasks.Remove(sourceType);
+                return result;
+            });
+            SerializerTypeCache.CacheTasks.Add(sourceType, task);
+            return await task;
         }
 
         private static List<BasicNode> GenerateNodes(Type sourceType)

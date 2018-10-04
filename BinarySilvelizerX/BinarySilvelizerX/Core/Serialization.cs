@@ -21,6 +21,7 @@ namespace BinarySilvelizerX.Core
             var memStream = new MemoryStream();
             var writer = new ExtendedWriter(memStream);
             var nodes = NodeListController.GetNodes(type);
+            if (nodes == null) return null;
             foreach (var node in nodes)
                 node.Serialize(writer, source);
             return memStream.ToArray();
@@ -38,6 +39,7 @@ namespace BinarySilvelizerX.Core
                 StringSerializer.WriteDynamic(writer, (string)(object)source);
             }
             var nodes = NodeListController.GetNodes(type);
+            if (nodes == null) return;
             foreach (var node in nodes)
                 node.Serialize(writer, source);
         }
@@ -71,6 +73,7 @@ namespace BinarySilvelizerX.Core
 
             var targetObject = existingObject ?? Activator.CreateInstance(type);
             var nodes = NodeListController.GetNodes(type);
+            if (nodes == null) return null;
             foreach (var node in nodes)
                 node.Deserialize(reader, targetObject);
             return targetObject;
