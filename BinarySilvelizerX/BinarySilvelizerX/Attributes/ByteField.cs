@@ -3,7 +3,7 @@
 namespace BinarySilvelizerX.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class ByteFieldAttribute : Attribute
+    public sealed class ByteFieldAttribute : Attribute
     {
     }
 }

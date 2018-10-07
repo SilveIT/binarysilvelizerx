@@ -3,10 +3,9 @@
 namespace BinarySilvelizerX.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class BFLengthAttribute : Attribute
+    public sealed class BFLengthAttribute : FieldBindingAttribute
     {
         internal int StaticLength { get; } = -1;
-        internal string LengthPropertyName { get; }
         internal LengthStorageType LengthStorageType { get; }
 
         /// <summary>
@@ -29,7 +28,7 @@ namespace BinarySilvelizerX.Attributes
         {
             if (string.IsNullOrEmpty(propName))
                 throw new ArgumentException("Property name cannot be null or empty!", nameof(propName));
-            LengthPropertyName = propName;
+            BindingPath = propName;
             LengthStorageType = LengthStorageType.External;
         }
     }

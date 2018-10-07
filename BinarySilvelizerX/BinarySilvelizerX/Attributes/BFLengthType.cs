@@ -3,7 +3,7 @@
 namespace BinarySilvelizerX.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class BFLengthTypeAttribute : Attribute
+    public sealed class BFLengthTypeAttribute : Attribute
     {
         public Type Type { get; }
 

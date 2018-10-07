@@ -7,7 +7,7 @@ namespace BinarySilvelizerX.Attributes
     /// This attribute can be used to define which properties will be automatically (de-)serialized.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = true)]
-    public class SerializationModeAttribute : Attribute
+    public sealed class SerializationModeAttribute : Attribute
     {
         public string PropertyName { get; }
         public SerializationAccessMode AccessMode { get; }

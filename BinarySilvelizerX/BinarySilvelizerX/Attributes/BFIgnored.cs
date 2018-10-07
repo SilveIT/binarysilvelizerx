@@ -3,7 +3,7 @@
 namespace BinarySilvelizerX.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class BFIgnoredAttribute : Attribute
+    public sealed class BFIgnoredAttribute : Attribute
     {
     }
 }

@@ -3,7 +3,7 @@
 namespace BinarySilvelizerX.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class BFSpacerAttribute : Attribute
+    public sealed class BFSpacerAttribute : Attribute
     {
         public int SpacerLength { get; }
 

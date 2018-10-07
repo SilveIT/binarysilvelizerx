@@ -4,7 +4,7 @@ using BinarySilvelizerX.Utils;
 
 namespace BinarySilvelizerX.Attributes
 {
-    public class BFEncodingAttribute : Attribute
+    public sealed class BFEncodingAttribute : Attribute
     {
         internal Encoding Encoding { get; }
 

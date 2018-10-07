@@ -34,7 +34,7 @@ namespace BinarySilvelizerX.Common
 
                 case LengthStorageType.External:
                     // ReSharper disable once PossibleNullReferenceException
-                    LengthSource = allProps.First(t => t.Type == NodeType.ValueType && t.Name == lenAttr.LengthPropertyName) as ValueTypeNode;
+                    LengthSource = allProps.First(t => t.Type == NodeType.ValueType && t.Name == lenAttr.BindingPath) as ValueTypeNode;
                     if (LengthSource == null)
                         throw new Exception($"Unable to find LengthSource of {prop.Name}! Make sure exists in the serialized properties before current!");
                     break;
