@@ -1,10 +1,13 @@
 ﻿using System;
-using BinarySilvelizerX.Interfaces;
 
 namespace BinarySilvelizerX.Attributes
 {
-    public class FieldBindingAttribute : Attribute, IFieldBinding
+    [AttributeUsage(AttributeTargets.Property)]
+    public class FieldBindingAttribute : Attribute
     {
+        /// <summary>
+        ///     Gets or sets the path to the binding source member.
+        /// </summary>
         public string BindingPath { get; set; }
     }
 }

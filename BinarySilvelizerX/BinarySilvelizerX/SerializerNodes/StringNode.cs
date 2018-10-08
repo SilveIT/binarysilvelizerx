@@ -12,19 +12,17 @@ namespace BinarySilvelizerX.SerializerNodes
 {
     internal class StringNode : SizableNode
     {
-        private readonly LengthInfo _lengthInfo;
         private readonly Encoding _stringEncoding;
 
         public StringNode(PropertyInfo info, LengthInfo lengthInfo) : base(info, NodeType.String, lengthInfo)
         {
-            _lengthInfo = lengthInfo;
             _stringEncoding = Info.GetFirstAttribute<BFEncodingAttribute>()?.Encoding
                 ?? SerializerDefaults.DefaultStringEncoding;
         }
 
         internal override void Serialize(ExtendedWriter writer, object sourceObject)
         {
-            var lnType = _lengthInfo.LengthType;
+            var lnType = LengthInfo.LengthType;
             var objAsString = Info.GetValue(sourceObject) as string;
             var enc = _stringEncoding;
             var bytesPerChar = enc.GetByteCount("0");
@@ -34,7 +32,7 @@ namespace BinarySilvelizerX.SerializerNodes
                 data = null;
             else
             {
-                if (_lengthInfo.StorageType != LengthStorageType.Dynamic) //TODO optimize
+                if (LengthInfo.StorageType != LengthStorageType.Dynamic) //TODO optimize
                 {
                     var staticLen = GetLength(sourceObject);
                     if (objAsString.Length > staticLen)
@@ -53,7 +51,7 @@ namespace BinarySilvelizerX.SerializerNodes
                 }
             }
 
-            if (_lengthInfo.StorageType == LengthStorageType.Dynamic)
+            if (LengthInfo.StorageType == LengthStorageType.Dynamic)
             {
                 var len = (objAsString?.Length ?? 0) + 1; //len + terminal null
                 writer.Write(ValueTypeSerializer.Write(len, lnType));
@@ -66,11 +64,11 @@ namespace BinarySilvelizerX.SerializerNodes
 
         internal override bool Deserialize(ExtendedReader reader, object targetObject)
         {
-            var lnType = _lengthInfo.LengthType;
+            var lnType = LengthInfo.LengthType;
             var enc = _stringEncoding;
             var bytesPerChar = enc.GetByteCount("0");
             int len;
-            if (_lengthInfo.StorageType == LengthStorageType.Dynamic)
+            if (LengthInfo.StorageType == LengthStorageType.Dynamic)
             {
                 var intType = typeof(int);
                 var gotLen = ValueTypeSerializer.Read(reader, lnType);

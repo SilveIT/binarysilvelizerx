@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 using BinarySilvelizerX.Core;
 using BinarySilvelizerX.Extensions;
 
+// ReSharper disable UnusedMember.Global
+
 namespace BinarySilvelizerX.PrimitiveSerializers
 {
     internal class ValueTypeSerializer

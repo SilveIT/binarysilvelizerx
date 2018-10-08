@@ -8,9 +8,6 @@ namespace BinarySilvelizerX.Attributes
     {
         internal Encoding Encoding { get; }
 
-        public BFEncodingAttribute(TextUtils.CodePage codePage)
-        {
-            Encoding = Encoding.GetEncoding((int)codePage);
-        }
+        public BFEncodingAttribute(TextUtils.CodePage codePage) => Encoding = Encoding.GetEncoding((int)codePage);
     }
 }

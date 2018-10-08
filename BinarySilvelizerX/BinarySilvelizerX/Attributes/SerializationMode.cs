@@ -1,8 +1,11 @@
 ﻿using System;
 using BinarySilvelizerX.Core;
 
+// ReSharper disable UnusedMember.Global
+
 namespace BinarySilvelizerX.Attributes
 {
+    /// <inheritdoc />
     /// <summary>
     /// This attribute can be used to define which properties will be automatically (de-)serialized.
     /// </summary>
@@ -13,10 +16,10 @@ namespace BinarySilvelizerX.Attributes
         public SerializationAccessMode AccessMode { get; }
         public SerializationOffsetMode OffsetMode { get; }
 
+        /// <inheritdoc />
         /// <param name="accessMode">Class (or structure) serialization mode by property access flag</param>
         /// <param name="offsetMode">Class (or structure) serialization mode by property offset</param>
         /// <param name="propName">Property name which will be used as serialization mode argument</param>
-
         public SerializationModeAttribute(SerializationAccessMode accessMode,
             SerializationOffsetMode offsetMode = SerializationOffsetMode.Unrestricted,
             string propName = null)
@@ -29,6 +32,9 @@ namespace BinarySilvelizerX.Attributes
             PropertyName = propName;
         }
 
+        /// <inheritdoc />
+        /// <param name="offsetMode">Class (or structure) serialization mode by property offset</param>
+        /// <param name="propName">Property name which will be used as serialization mode argument</param>
         public SerializationModeAttribute(SerializationOffsetMode offsetMode, string propName)
         {
             if (string.IsNullOrEmpty(propName))

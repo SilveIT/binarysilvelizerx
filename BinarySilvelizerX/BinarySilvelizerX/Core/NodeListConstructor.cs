@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BinarySilvelizerX.Common;
 using BinarySilvelizerX.Extensions;
@@ -64,7 +65,7 @@ namespace BinarySilvelizerX.Core
                     else if (type.IsIPAddress())
                         nodes.Add(new IPAddressNode(prop));
                     else
-                        nodes.Add(new ObjectNode(prop));
+                        nodes.Add(new ObjectNode(prop, new SubtypeInfo(prop, nodes)));
                 }
             }
             return nodes;

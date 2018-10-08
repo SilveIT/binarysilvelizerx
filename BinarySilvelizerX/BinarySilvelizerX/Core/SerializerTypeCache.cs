@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using BinarySilvelizerX.Common;
 using BinarySilvelizerX.SerializerNodes;
 
+// ReSharper disable UnusedMember.Global
+
 namespace BinarySilvelizerX.Core
 {
     public static class SerializerTypeCache
     {
-        internal static Dictionary<Type, Task<List<BasicNode>>> CacheTasks { get; } = new Dictionary<Type, Task<List<BasicNode>>>(); //TODO
+        internal static Dictionary<Type, Task<List<BasicNode>>> CacheTasks { get; } = new Dictionary<Type, Task<List<BasicNode>>>();
         internal static Dictionary<Type, List<BasicNode>> CacheStorage { get; } = new Dictionary<Type, List<BasicNode>>();
         public static bool Enabled { get; set; } = true;
 

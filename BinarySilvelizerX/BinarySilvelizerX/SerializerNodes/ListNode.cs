@@ -15,11 +15,8 @@ namespace BinarySilvelizerX.SerializerNodes
 {
     internal class ListNode : SizableNode
     {
-        private readonly LengthInfo _lengthInfo;
-
         public ListNode(PropertyInfo info, LengthInfo lengthInfo) : base(info, NodeType.List, lengthInfo)
         {
-            _lengthInfo = lengthInfo;
         }
 
         internal override void Serialize(ExtendedWriter writer, object sourceObject)
@@ -28,10 +25,10 @@ namespace BinarySilvelizerX.SerializerNodes
             var listSubType = type.GetElementType() ?? type.GetGenericArguments().Single();
             var list = (IList)Info.GetValue(sourceObject);
             int len;
-            if (_lengthInfo.StorageType == LengthStorageType.Dynamic)
+            if (LengthInfo.StorageType == LengthStorageType.Dynamic)
             {
                 len = list?.Count ?? 0;
-                var lnType = _lengthInfo.LengthType;
+                var lnType = LengthInfo.LengthType;
                 writer.Write(ValueTypeSerializer.Write(len, lnType));
                 if (len == 0) return;
                 if (list == null)
@@ -62,12 +59,12 @@ namespace BinarySilvelizerX.SerializerNodes
             }
             else
             {
-                var cntr = 0;
+                var ctr = 0;
                 foreach (var item in list)
                 {
-                    if (cntr >= len) break;
+                    if (ctr >= len) break;
                     Serializer.Serialize(writer, item, listSubType);
-                    cntr++;
+                    ctr++;
                 }
             }
         }
@@ -76,9 +73,9 @@ namespace BinarySilvelizerX.SerializerNodes
         {
             var type = Info.PropertyType;
             var listSubType = type.GetElementType() ?? type.GetGenericArguments().Single();
-            var lnType = _lengthInfo.LengthType;
+            var lnType = LengthInfo.LengthType;
             int len;
-            if (_lengthInfo.StorageType == LengthStorageType.Dynamic)
+            if (LengthInfo.StorageType == LengthStorageType.Dynamic)
             {
                 var l = ValueTypeSerializer.Read(reader, lnType);
                 if (l == null) return false;
@@ -90,7 +87,7 @@ namespace BinarySilvelizerX.SerializerNodes
             {
                 var list = (IList)Info.GetValue(targetObject);
                 var propValLen = list?.Count ?? -1;
-                if (list == null || propValLen != len) //if length isn's same we will override it with new collection
+                if (list == null || propValLen != len) //if length differs we will override it with new collection
                     list = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(listSubType));
 
                 for (var o = 0; o < len; o++)

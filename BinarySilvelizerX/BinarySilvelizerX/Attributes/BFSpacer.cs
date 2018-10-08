@@ -7,9 +7,6 @@ namespace BinarySilvelizerX.Attributes
     {
         public int SpacerLength { get; }
 
-        public BFSpacerAttribute(int spacerLength)
-        {
-            SpacerLength = spacerLength;
-        }
+        public BFSpacerAttribute(int spacerLength) => SpacerLength = spacerLength;
     }
 }

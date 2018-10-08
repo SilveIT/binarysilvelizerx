@@ -12,7 +12,8 @@ namespace BinarySilvelizerX.SerializerNodes
         public ValueTypeNode(PropertyInfo info, Type valueType)
             : base(info, NodeType.ValueType) => _valueType = valueType;
 
-        internal override void Serialize(ExtendedWriter writer, object sourceObject) => ValueTypeSerializer.Write(writer, Info.GetValue(sourceObject), _valueType);
+        internal override void Serialize(ExtendedWriter writer, object sourceObject) =>
+            ValueTypeSerializer.Write(writer, Info.GetValue(sourceObject), _valueType);
 
         internal override bool Deserialize(ExtendedReader reader, object targetObject)
         {

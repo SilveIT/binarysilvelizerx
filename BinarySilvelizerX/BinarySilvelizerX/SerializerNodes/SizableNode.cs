@@ -7,25 +7,22 @@ namespace BinarySilvelizerX.SerializerNodes
 {
     internal abstract class SizableNode : BasicNode
     {
-        private readonly LengthInfo _lengthInfo;
+        internal LengthInfo LengthInfo { get; }
 
-        internal SizableNode(PropertyInfo info, NodeType type, LengthInfo lengthInfo) : base(info, type)
-        {
-            _lengthInfo = lengthInfo;
-        }
+        internal SizableNode(PropertyInfo info, NodeType type, LengthInfo lengthInfo) : base(info, type) => LengthInfo = lengthInfo;
 
         internal int GetLength(object sourceObject)
         {
-            switch (_lengthInfo.StorageType)
+            switch (LengthInfo.StorageType)
             {
                 case LengthStorageType.Dynamic:
                     return -1;
 
                 case LengthStorageType.Static:
-                    return _lengthInfo.StaticLength;
+                    return LengthInfo.StaticLength;
 
                 case LengthStorageType.External:
-                    var lenVal = _lengthInfo.LengthSource.Info.GetValue(sourceObject);
+                    var lenVal = LengthInfo.LengthSource.Info.GetValue(sourceObject);
                     var intType = typeof(int);
                     return Info.PropertyType == intType
                         ? (int)lenVal
@@ -36,13 +33,13 @@ namespace BinarySilvelizerX.SerializerNodes
             }
         }
 
-        internal void SetLength(object sourceObject, int value)
-        {
-            if (_lengthInfo.StorageType == LengthStorageType.External)
-                _lengthInfo.LengthSource.Info.SetValue(sourceObject, Info.PropertyType == typeof(int)
-                    ? value
-                    : Convert.ChangeType(value, Info.PropertyType));
-            else throw new ArgumentOutOfRangeException();
-        }
+        //internal void SetLength(object sourceObject, int value)
+        //{
+        //    if (LengthInfo.StorageType == LengthStorageType.External)
+        //        LengthInfo.LengthSource.Info.SetValue(sourceObject, Info.PropertyType == typeof(int)
+        //            ? value
+        //            : Convert.ChangeType(value, Info.PropertyType));
+        //    else throw new ArgumentOutOfRangeException();
+        //}
     }
 }

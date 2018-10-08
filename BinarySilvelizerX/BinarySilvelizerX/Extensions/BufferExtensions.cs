@@ -1,5 +1,7 @@
 ﻿using System.Text;
 
+// ReSharper disable UnusedMember.Global
+
 namespace BinarySilvelizerX.Extensions
 {
     public static class BufferExtensions
@@ -20,10 +22,10 @@ namespace BinarySilvelizerX.Extensions
                 counter++;
                 if (counter != 16) continue;
                 sb.Append("   ");
-                var charpoint = i - 15;
+                var charPoint = i - 15;
                 for (var j = 0; j < 16; j++)
                 {
-                    var n = buffer[charpoint++];
+                    var n = buffer[charPoint++];
                     if (n > 0x1f && n < 0x80)
                         sb.Append((char)n);
                     else
@@ -37,10 +39,10 @@ namespace BinarySilvelizerX.Extensions
             {
                 for (var i = 0; i < 17 - rest; i++)
                     sb.Append("   ");
-                var charpoint = length - rest;
+                var charPoint = length - rest;
                 for (var j = 0; j < rest; j++)
                 {
-                    var n = buffer[charpoint++];
+                    var n = buffer[charPoint++];
                     if (n > 0x1f && n < 0x80)
                         sb.Append((char)n);
                     else

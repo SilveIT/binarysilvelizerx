@@ -4,6 +4,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+// ReSharper disable UnusedMember.Global
+
 namespace BinarySilvelizerX.Streams
 {
     public class ExtendedWriter : BinaryWriter

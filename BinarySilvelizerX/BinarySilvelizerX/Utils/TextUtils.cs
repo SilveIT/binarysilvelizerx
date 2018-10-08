@@ -1,5 +1,9 @@
 ﻿using System.ComponentModel;
 
+// ReSharper disable CommentTypo
+// ReSharper disable UnusedMember.Global
+// ReSharper disable IdentifierTypo
+
 namespace BinarySilvelizerX.Utils
 {
     public static class TextUtils

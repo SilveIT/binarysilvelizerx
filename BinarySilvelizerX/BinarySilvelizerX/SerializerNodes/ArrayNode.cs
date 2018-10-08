@@ -13,11 +13,8 @@ namespace BinarySilvelizerX.SerializerNodes
 {
     internal class ArrayNode : SizableNode
     {
-        private readonly LengthInfo _lengthInfo;
-
         public ArrayNode(PropertyInfo info, LengthInfo lengthInfo) : base(info, NodeType.Array, lengthInfo)
         {
-            _lengthInfo = lengthInfo;
         }
 
         internal override void Serialize(ExtendedWriter writer, object sourceObject)
@@ -26,10 +23,10 @@ namespace BinarySilvelizerX.SerializerNodes
             var arraySubType = type.GetElementType() ?? type.GetGenericArguments().Single();
             var array = (Array)Info.GetValue(sourceObject);
             int len;
-            if (_lengthInfo.StorageType == LengthStorageType.Dynamic)
+            if (LengthInfo.StorageType == LengthStorageType.Dynamic)
             {
                 len = array?.Length ?? 0;
-                var lnType = _lengthInfo.LengthType;
+                var lnType = LengthInfo.LengthType;
                 writer.Write(ValueTypeSerializer.Write(len, lnType));
                 if (len == 0) return;
                 if (array == null)
@@ -56,12 +53,12 @@ namespace BinarySilvelizerX.SerializerNodes
                 writer.Write((byte[])array);
             else
             {
-                var cntr = 0;
+                var ctr = 0;
                 foreach (var item in array)
                 {
-                    if (cntr >= len) break;
+                    if (ctr >= len) break;
                     Serializer.Serialize(writer, item, arraySubType);
-                    cntr++;
+                    ctr++;
                 }
             }
         }
@@ -70,9 +67,9 @@ namespace BinarySilvelizerX.SerializerNodes
         {
             var type = Info.PropertyType;
             var arraySubType = type.GetElementType() ?? type.GetGenericArguments().Single();
-            var lnType = _lengthInfo.LengthType;
+            var lnType = LengthInfo.LengthType;
             int len;
-            if (_lengthInfo.StorageType == LengthStorageType.Dynamic)
+            if (LengthInfo.StorageType == LengthStorageType.Dynamic)
             {
                 var l = ValueTypeSerializer.Read(reader, lnType);
                 if (l == null) return false;
@@ -84,7 +81,7 @@ namespace BinarySilvelizerX.SerializerNodes
             {
                 var array = (Array)Info.GetValue(targetObject);
                 var propValLen = array?.Length ?? -1;
-                if (array == null || propValLen != len) //if length isn's same we will override it with new array
+                if (array == null || propValLen != len) //if length differs we will override it with new array
                     array = Array.CreateInstance(arraySubType, len);
 
                 for (var o = 0; o < len; o++)
@@ -114,7 +111,6 @@ namespace BinarySilvelizerX.SerializerNodes
             if (copyLen != 0)
                 Array.Copy(arr, 0, outp, 0, copyLen);
             return outp;
-            //return new ArraySegment<object>(arr, 0, copyLen).ToArray();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace BinarySilvelizerX.SerializerNodes
         internal override bool Deserialize(ExtendedReader reader, object targetObject)
         {
             if (reader.AvailableLength() < SpacerLength) return false;
-            reader.ReadBytes(SpacerLength); //TODO: think about reader.BaseStream.Seek
+            reader.ReadBytes(SpacerLength);
             return true;
         }
     }
