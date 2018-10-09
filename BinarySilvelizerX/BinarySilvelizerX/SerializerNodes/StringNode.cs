@@ -71,7 +71,7 @@ namespace BinarySilvelizerX.SerializerNodes
             if (LengthInfo.StorageType == LengthStorageType.Dynamic)
             {
                 var intType = typeof(int);
-                var gotLen = ValueTypeSerializer.Read(reader, lnType);
+                var gotLen = ValueTypeSerializer.Read(reader, lnType) ?? 0;
                 len = lnType == intType ? (int)gotLen : (int)Convert.ChangeType(gotLen, intType);
             }
             else

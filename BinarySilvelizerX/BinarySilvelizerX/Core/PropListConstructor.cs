@@ -14,13 +14,19 @@ namespace BinarySilvelizerX.Core
         {
             //Stage 1, getting attribute data
             var attributes = objectType.GetAttributesArray<SerializationModeAttribute>();
-            var accessFilter = SerializerDefaults.DefaultPropAccessMode;
+            var accessDefault = SerializerDefaults.DefaultPropAccessMode;
+            var accessorDefault = SerializerDefaults.DefaultAccessorMode;
+            var accessFilter = accessDefault;
+            var accessorFilter = accessorDefault;
             string startPropStr = null;
             string endPropStr = null;
             if (attributes != null)
                 foreach (var attribute in attributes)
                 {
-                    accessFilter = attribute.AccessMode;
+                    if (attribute.AccessMode != accessDefault)
+                        accessFilter = attribute.AccessMode;
+                    if (attribute.AccessorMode != accessorDefault)
+                        accessorFilter = attribute.AccessorMode;
                     switch (attribute.OffsetMode)
                     {
                         case SerializationOffsetMode.Unrestricted:
@@ -43,7 +49,7 @@ namespace BinarySilvelizerX.Core
             var bindingFlags = GetBindingFlags(accessFilter);
             var props = objectType.GetProperties(bindingFlags);
             if (props.Length == 0) return props; //Already empty.. So we don't wanna go deeper
-            props = GetPropertiesByAccess(props, accessFilter);
+            props = GetPropertiesByModes(props, accessFilter, accessorFilter);
             if (props.Length == 0 || startPropStr == null && endPropStr == null) return props; //-V3130
 
             //Stage 3, processing startProp and endProp data
@@ -59,26 +65,33 @@ namespace BinarySilvelizerX.Core
             var count = endIndex - startIndex + 1;
             if (count < 1)
                 throw new Exception("Count of properties marked for (de-)serialization < 1");
-            return new ArraySegment<PropertyInfo>(source, startIndex, count).ToArray(); //TODO check perfomance
+            return new ArraySegment<PropertyInfo>(source, startIndex, count).ToArray(); //TODO check performance
             //var dest = new PropertyInfo[count];
             //Array.Copy(source, startIndex, dest, 0, count);
             //return dest;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static PropertyInfo[] GetPropertiesByAccess(IEnumerable<PropertyInfo> source, SerializationAccessMode access)
-        {
-            return access == SerializationAccessMode.OnlyByteFields
+        private static PropertyInfo[] GetPropertiesByModes(IEnumerable<PropertyInfo> source,
+            SerializationAccessMode access,
+            SerializationAccessorMode accessor) =>
+            access == SerializationAccessMode.OnlyByteFields
                 ? source.Where(t =>
-                t.CanRead && t.CanWrite
+                    accessor == SerializationAccessorMode.OnlyReadable
+                        ? !t.CanWrite
+                        : (accessor == SerializationAccessorMode.OnlyWritable ? !t.CanRead
+                              : accessor != SerializationAccessorMode.OnlyBoth || t.CanRead & t.CanWrite)
                 && Attribute.IsDefined(t, typeof(ByteFieldAttribute))
                 && !Attribute.IsDefined(t, typeof(BFIgnoredAttribute))
                 ).ToArray()
+
                 : source.Where(t =>
-                t.CanRead && t.CanWrite
+                    accessor == SerializationAccessorMode.OnlyReadable
+                        ? !t.CanWrite
+                        : (accessor == SerializationAccessorMode.OnlyWritable ? !t.CanRead
+                              : accessor != SerializationAccessorMode.OnlyBoth || t.CanRead & t.CanWrite)
                 && !Attribute.IsDefined(t, typeof(BFIgnoredAttribute))
                 ).ToArray();
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int GetPropertyIndex(PropertyInfo[] props, string name)

@@ -39,6 +39,7 @@ namespace BinarySilvelizerX.Example
         public RootModel Data { get; set; }
     }
 
+    [SerializationMode(SerializationAccessorMode.OnlyBoth)] //Just as example
     public class DerivedModel1 : RootModel
     {
         public string HelloWorld { get; set; }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BinarySilvelizerX.Common;
 using BinarySilvelizerX.Extensions;
@@ -26,10 +25,10 @@ namespace BinarySilvelizerX.Core
             {
                 var result = t.Result;
                 SerializerTypeCache.Cache(sourceType, result);
-                SerializerTypeCache.CacheTasks.Remove(sourceType);
+                SerializerTypeCache.CacheTasks.TryRemove(sourceType, out _);
                 return result;
             });
-            SerializerTypeCache.CacheTasks.Add(sourceType, task);
+            SerializerTypeCache.CacheTasks.TryAdd(sourceType, task);
             return await task;
         }
 

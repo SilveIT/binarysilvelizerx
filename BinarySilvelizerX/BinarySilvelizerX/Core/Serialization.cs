@@ -23,7 +23,10 @@ namespace BinarySilvelizerX.Core
             var nodes = NodeListController.GetNodes(type);
             if (nodes == null) return null;
             foreach (var node in nodes)
-                node.Serialize(writer, source);
+            {
+                if (node.Info.CanRead)
+                    node.Serialize(writer, source);
+            }
             return memStream.ToArray();
         }
 
@@ -41,7 +44,10 @@ namespace BinarySilvelizerX.Core
             var nodes = NodeListController.GetNodes(type);
             if (nodes == null) return;
             foreach (var node in nodes)
-                node.Serialize(writer, source);
+            {
+                if (node.Info.CanRead)
+                    node.Serialize(writer, source);
+            }
         }
     }
 
@@ -75,7 +81,10 @@ namespace BinarySilvelizerX.Core
             var nodes = NodeListController.GetNodes(type);
             if (nodes == null) return null;
             foreach (var node in nodes)
-                node.Deserialize(reader, targetObject);
+            {
+                if (node.Info.CanWrite)
+                    node.Deserialize(reader, targetObject);
+            }
             return targetObject;
         }
     }
