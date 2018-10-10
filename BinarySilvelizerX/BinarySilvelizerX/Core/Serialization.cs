@@ -79,7 +79,7 @@ namespace BinarySilvelizerX.Core
 
             var targetObject = existingObject ?? Activator.CreateInstance(type);
             var nodes = NodeListController.GetNodes(type);
-            if (nodes == null) return null;
+            if (nodes == null) return targetObject;
             foreach (var node in nodes)
             {
                 if (node.Info.CanWrite)

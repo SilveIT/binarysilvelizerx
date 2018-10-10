@@ -44,11 +44,11 @@ namespace BinarySilvelizerX.Example
             Console.WriteLine($"Opcode: {outPacket3.Opcode}, " +
                               $"bublik: {outPacket3.Data.Bublik}, " +
                               $"byterok: {((DefaultDerModel)outPacket3.Data).Byterok}");
-            Console.WriteLine($"Opcode: {outPacket3.Opcode}, " +
-                              $"bublik: {outPacket3.Data.Bublik}, " +
+            Console.WriteLine($"Opcode: {outPacket4.Opcode}, " +
+                              $"bublik: {outPacket4.Data.Bublik}, " +
                               $"kolbason: {((FactoryDerModel)outPacket4.Data).Kolbason}");
-            Console.WriteLine($"Opcode: {outPacket3.Opcode}, " +
-                              $"bublik: {outPacket3.Data.Bublik}, " +
+            Console.WriteLine($"Opcode: {outPacket5.Opcode}, " +
+                              $"bublik: {outPacket5.Data.Bublik}, " +
                               $"kolbason: {((FactoryDerModel)outPacket5.Data).Kolbason}");
             Console.ReadKey();
         }
