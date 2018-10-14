@@ -28,31 +28,35 @@ namespace BinarySilvelizerX.SerializerNodes
             var bytesPerChar = enc.GetByteCount("0");
             var dataLength = bytesPerChar; //null + terminal null
             byte[] data;
-            if (string.IsNullOrEmpty(objAsString))
-                data = null;
-            else
+
+            if (LengthInfo.StorageType != LengthStorageType.Dynamic) //TODO optimize
             {
-                if (LengthInfo.StorageType != LengthStorageType.Dynamic) //TODO optimize
+                var staticLen = GetLength(sourceObject);
+                dataLength += staticLen * bytesPerChar;
+                if (string.IsNullOrEmpty(objAsString))
+                    data = null;
+                else
                 {
-                    var staticLen = GetLength(sourceObject);
                     if (objAsString.Length > staticLen)
                     {
                         Logger.Write("String length > defined static string length, cutting!", "O2B",
                             Logger.MessageType.Info);
                         objAsString = objAsString.Substring(0, staticLen);
                     }
+
                     data = enc.GetBytes(objAsString);
-                    dataLength += staticLen * bytesPerChar;
                 }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(objAsString))
+                    data = null;
                 else
                 {
                     data = enc.GetBytes(objAsString);
                     dataLength += data.Length;
                 }
-            }
 
-            if (LengthInfo.StorageType == LengthStorageType.Dynamic)
-            {
                 var len = (objAsString?.Length ?? 0) + 1; //len + terminal null
                 writer.Write(ValueTypeSerializer.Write(len, lnType));
             }
