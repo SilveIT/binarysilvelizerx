@@ -1,4 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using BinarySilvelizerX.Core;
+using BinarySilvelizerX.Extensions;
 
 namespace BinarySilvelizerX.Example
 {
@@ -50,7 +56,53 @@ namespace BinarySilvelizerX.Example
             Console.WriteLine($"Opcode: {outPacket5.Opcode}, " +
                               $"bublik: {outPacket5.Data.Bublik}, " +
                               $"kolbason: {((FactoryDerModel)outPacket5.Data).Kolbason}");
+
+            //var beer = new Beer
+            //{
+            //    Alcohol = 6,
+
+            //    Brand = "Brand",
+            //    Sort = new List<SortContainer>
+            //    {
+            //        new SortContainer{Name = "some sort of beer"},
+            //        new SortContainer {Name = "another beer"}
+            //    },
+            //    WeirdNumber = 3,
+            //    WeirdNumber2 = 2,
+            //    Color = Color.Blue,
+            //    TerminatedString = "hello everyone",
+            //    Brewery = "Brasserie Grain d'Orge"
+            //};
+
+            //DoBS(beer, 100000);
+
             Console.ReadKey();
+        }
+
+        private static void DoBS<T>(T obj, int iterations)
+        {
+            byte[] data = null;
+            var stopwatch = new Stopwatch();
+            SerializerTypeCache.Cache(typeof(T));
+
+            stopwatch.Start();
+            for (var i = 0; i < iterations; i++)
+            {
+                data = obj.GetBytes();
+            }
+            stopwatch.Stop();
+            Console.WriteLine("BS SER: {0}", stopwatch.Elapsed);
+            stopwatch.Reset();
+
+            object obj1 = null;
+            stopwatch.Start();
+            for (var i = 0; i < iterations; i++)
+            {
+                obj1 = data.GetObject<T>();
+            }
+            stopwatch.Stop();
+            Console.WriteLine("BS DESER: {0}", stopwatch.Elapsed);
+            stopwatch.Reset();
         }
     }
 }

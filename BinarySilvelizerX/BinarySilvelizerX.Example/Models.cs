@@ -1,13 +1,53 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Net;
 using BinarySilvelizerX.Attributes;
 using BinarySilvelizerX.Core;
 using BinarySilvelizerX.Interfaces;
+using BinarySilvelizerX.Utils;
 
 // ReSharper disable UnusedMember.Global
 
 namespace BinarySilvelizerX.Example
 {
+    public class Beer
+    {
+        public string Brand { get; set; }
+
+        [BFIgnored]
+        public byte SortCount { get; set; }
+
+        [BFLength(2)]
+        public List<SortContainer> Sort { get; set; }
+
+        public float Alcohol { get; set; }
+
+        public string Brewery { get; set; }
+
+        public ushort Crc { get; set; }
+
+        public byte WeirdNumber { get; set; }
+        public byte WeirdNumber23 { get; set; }
+
+        public byte WeirdNumber2 { get; set; }
+        public byte WeirdNumber24 { get; set; }
+
+        [BFEncoding(TextUtils.CodePage.Utf32)]
+        public string TerminatedString { get; set; }
+
+        public Color Color { get; set; }
+    }
+
+    [Serializable]
+    public class SortContainer
+    {
+        public byte NameLength { get; set; }
+
+        [BFLength("NameLength")]
+        public string Name { get; set; }
+    }
+
     public class PacketFactory : ISubtypeFactory
     {
         public bool TryGetType(object key, out Type type)

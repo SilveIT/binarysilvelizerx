@@ -14,17 +14,14 @@ namespace BinarySilvelizerX.SerializerNodes
     {
         private readonly Encoding _stringEncoding;
 
-        public StringNode(PropertyInfo info, LengthInfo lengthInfo) : base(info, NodeType.String, lengthInfo)
-        {
-            _stringEncoding = Info.GetFirstAttribute<BFEncodingAttribute>()?.Encoding
-                ?? SerializerDefaults.DefaultStringEncoding;
-        }
+        public StringNode(PropertyInfo info, LengthInfo lengthInfo) : base(info, NodeType.String, lengthInfo) =>
+            _stringEncoding = Info.GetFirstAttribute<BFEncodingAttribute>()?.Encoding;
 
         internal override void Serialize(ExtendedWriter writer, object sourceObject)
         {
             var lnType = LengthInfo.LengthType;
             var objAsString = Info.GetValue(sourceObject) as string;
-            var enc = _stringEncoding;
+            var enc = _stringEncoding ?? SerializerDefaults.DefaultStringEncoding;
             var bytesPerChar = enc.GetByteCount("0");
             var dataLength = bytesPerChar; //null + terminal null
             byte[] data;
@@ -69,7 +66,7 @@ namespace BinarySilvelizerX.SerializerNodes
         internal override bool Deserialize(ExtendedReader reader, object targetObject)
         {
             var lnType = LengthInfo.LengthType;
-            var enc = _stringEncoding;
+            var enc = _stringEncoding ?? SerializerDefaults.DefaultStringEncoding;
             var bytesPerChar = enc.GetByteCount("0");
             int len;
             if (LengthInfo.StorageType == LengthStorageType.Dynamic)
