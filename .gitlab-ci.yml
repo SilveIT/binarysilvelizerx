@@ -9,7 +9,11 @@ build:
   script:
     - "bash build.sh"
     - zip -r BinarySilvelizerX_build.zip Build
-    
+
+  tags:
+    - shared
+    - netstandard
+
   artifacts:
     paths:
     - BinarySilvelizerX_build.zip
