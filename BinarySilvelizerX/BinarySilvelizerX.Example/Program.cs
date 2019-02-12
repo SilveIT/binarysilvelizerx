@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using BinarySilvelizerX.Core;
-using BinarySilvelizerX.Extensions;
 
 namespace BinarySilvelizerX.Example
 {
@@ -13,11 +7,11 @@ namespace BinarySilvelizerX.Example
         private static void Main()
         {
             //Input derived models
-            var inlinedModel1 = new DerivedModel1 { Bublik = 1, HelloWorld = "hello" };
-            var inlinedModel2 = new DerivedModel2 { Bublik = 2, Byter = 0xFF };
-            var inlinedModel3 = new DefaultDerModel { Bublik = 3, Byterok = 0xFE };
-            var inlinedModel4 = new FactoryDerModel { Bublik = 4, Kolbason = 1337 };
-            var inlinedModel5 = new FactoryDerModel { Bublik = 5, Kolbason = 22848 };
+            var inlinedModel1 = new DerivedModel1 { BaseInt = 1, HelloWorld = "hello" };
+            var inlinedModel2 = new DerivedModel2 { BaseInt = 2, SampleByte = 0xFF };
+            var inlinedModel3 = new DefaultDerModel { BaseInt = 3, AnotherByte = 0xFE };
+            var inlinedModel4 = new FactoryDerModel { BaseInt = 4, SampleInt = 1337 };
+            var inlinedModel5 = new FactoryDerModel { BaseInt = 5, SampleInt = 22848 };
 
             //Input models filled with data as root models
             var model1 = new UniversalPacket { Opcode = Opcodes.Packet1, Data = inlinedModel1 };
@@ -42,21 +36,22 @@ namespace BinarySilvelizerX.Example
 
             //Checking what we've got
             Console.WriteLine($"Opcode: {outPacket1.Opcode}, " +
-                              $"bublik: {outPacket1.Data.Bublik}, " +
+                              $"AnotherInt: {outPacket1.Data.BaseInt}, " +
                               $"HelloWorld: {((DerivedModel1)outPacket1.Data).HelloWorld}");
             Console.WriteLine($"Opcode: {outPacket2.Opcode}, " +
-                              $"bublik: {outPacket2.Data.Bublik}, " +
-                              $"byter: {((DerivedModel2)outPacket2.Data).Byter}");
+                              $"AnotherInt: {outPacket2.Data.BaseInt}, " +
+                              $"SampleByte: {((DerivedModel2)outPacket2.Data).SampleByte}");
             Console.WriteLine($"Opcode: {outPacket3.Opcode}, " +
-                              $"bublik: {outPacket3.Data.Bublik}, " +
-                              $"byterok: {((DefaultDerModel)outPacket3.Data).Byterok}");
+                              $"AnotherInt: {outPacket3.Data.BaseInt}, " +
+                              $"AnotherByte: {((DefaultDerModel)outPacket3.Data).AnotherByte}");
             Console.WriteLine($"Opcode: {outPacket4.Opcode}, " +
-                              $"bublik: {outPacket4.Data.Bublik}, " +
-                              $"kolbason: {((FactoryDerModel)outPacket4.Data).Kolbason}");
+                              $"AnotherInt: {outPacket4.Data.BaseInt}, " +
+                              $"SampleInt: {((FactoryDerModel)outPacket4.Data).SampleInt}");
             Console.WriteLine($"Opcode: {outPacket5.Opcode}, " +
-                              $"bublik: {outPacket5.Data.Bublik}, " +
-                              $"kolbason: {((FactoryDerModel)outPacket5.Data).Kolbason}");
+                              $"AnotherInt: {outPacket5.Data.BaseInt}, " +
+                              $"SampleInt: {((FactoryDerModel)outPacket5.Data).SampleInt}");
 
+            //TODO: make proper tests
             //var beer = new Beer
             //{
             //    Alcohol = 6,
@@ -79,30 +74,30 @@ namespace BinarySilvelizerX.Example
             Console.ReadKey();
         }
 
-        private static void DoBS<T>(T obj, int iterations)
-        {
-            byte[] data = null;
-            var stopwatch = new Stopwatch();
-            SerializerTypeCache.Cache(typeof(T));
+        //private static void DoBS<T>(T obj, int iterations)
+        //{
+        //    byte[] data = null;
+        //    var stopwatch = new Stopwatch();
+        //    SerializerTypeCache.Cache(typeof(T));
 
-            stopwatch.Start();
-            for (var i = 0; i < iterations; i++)
-            {
-                data = obj.GetBytes();
-            }
-            stopwatch.Stop();
-            Console.WriteLine("BS SER: {0}", stopwatch.Elapsed);
-            stopwatch.Reset();
+        //    stopwatch.Start();
+        //    for (var i = 0; i < iterations; i++)
+        //    {
+        //        data = obj.GetBytes();
+        //    }
+        //    stopwatch.Stop();
+        //    Console.WriteLine("BS SER: {0}", stopwatch.Elapsed);
+        //    stopwatch.Reset();
 
-            object obj1 = null;
-            stopwatch.Start();
-            for (var i = 0; i < iterations; i++)
-            {
-                obj1 = data.GetObject<T>();
-            }
-            stopwatch.Stop();
-            Console.WriteLine("BS DESER: {0}", stopwatch.Elapsed);
-            stopwatch.Reset();
-        }
+        //    object obj1 = null;
+        //    stopwatch.Start();
+        //    for (var i = 0; i < iterations; i++)
+        //    {
+        //        obj1 = data.GetObject<T>();
+        //    }
+        //    stopwatch.Stop();
+        //    Console.WriteLine("BS DESER: {0}", stopwatch.Elapsed);
+        //    stopwatch.Reset();
+        //}
     }
 }

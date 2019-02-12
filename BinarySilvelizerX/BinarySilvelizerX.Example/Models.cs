@@ -87,22 +87,22 @@ namespace BinarySilvelizerX.Example
 
     public class DerivedModel2 : RootModel
     {
-        public byte Byter { get; set; }
+        public byte SampleByte { get; set; }
     }
 
     public class DefaultDerModel : RootModel
     {
-        public byte Byterok { get; set; }
+        public byte AnotherByte { get; set; }
     }
 
     public class FactoryDerModel : RootModel
     {
-        public int Kolbason { get; set; }
+        public int SampleInt { get; set; }
     }
 
     public class RootModel
     {
-        public int Bublik { get; set; }
+        public int BaseInt { get; set; }
     }
 
     public enum Opcodes

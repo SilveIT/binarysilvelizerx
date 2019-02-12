@@ -71,27 +71,20 @@ namespace BinarySilvelizerX.Core
             //return dest;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static PropertyInfo[] GetPropertiesByModes(IEnumerable<PropertyInfo> source,
             SerializationAccessMode access,
-            SerializationAccessorMode accessor) =>
-            access == SerializationAccessMode.OnlyByteFields
-                ? source.Where(t =>
-                    accessor == SerializationAccessorMode.OnlyReadable
-                        ? !t.CanWrite
-                        : (accessor == SerializationAccessorMode.OnlyWritable ? !t.CanRead
-                              : accessor != SerializationAccessorMode.OnlyBoth || t.CanRead & t.CanWrite)
-                && Attribute.IsDefined(t, typeof(ByteFieldAttribute))
-                && !Attribute.IsDefined(t, typeof(BFIgnoredAttribute))
-                ).ToArray()
-
-                : source.Where(t =>
-                    accessor == SerializationAccessorMode.OnlyReadable
-                        ? !t.CanWrite
-                        : (accessor == SerializationAccessorMode.OnlyWritable ? !t.CanRead
-                              : accessor != SerializationAccessorMode.OnlyBoth || t.CanRead & t.CanWrite)
-                && !Attribute.IsDefined(t, typeof(BFIgnoredAttribute))
-                ).ToArray();
+            SerializationAccessorMode accessor)
+        {
+            var res = source.Where(t => accessor == SerializationAccessorMode.OnlyReadable
+                ? !t.CanWrite
+                : (accessor == SerializationAccessorMode.OnlyWritable
+                      ? !t.CanRead
+                      : accessor != SerializationAccessorMode.OnlyBoth || t.CanRead & t.CanWrite)
+                  && !Attribute.IsDefined(t, typeof(BFIgnoredAttribute)));
+            return access == SerializationAccessMode.OnlyByteFields
+                ? res.Where(t => Attribute.IsDefined(t, typeof(ByteFieldAttribute))).ToArray()
+                : res.ToArray();
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int GetPropertyIndex(PropertyInfo[] props, string name)
